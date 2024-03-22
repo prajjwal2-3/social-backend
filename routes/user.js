@@ -17,6 +17,17 @@ router.post('/signup', (req, res) => {
                password:password
        })
 });
+router.get('/login',userMiddleware,(req,res)=>{
+    const {username,password} = req.headers
+    res.json({
+        username:username,
+        password:password,
+        msg:'login successful'
+    })
+}
+
+
+)
 
 router.get('/post',async (req, res) => {
     const Postlist = await Post.find({})
