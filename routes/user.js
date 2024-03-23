@@ -42,7 +42,7 @@ router.get('/usersuggestion',async(req,res)=>{
         user:users
     })
 })
-router.get('/userinfo',userMiddleware,async(req,res)=>{
+router.get('/userinfo', async(req,res)=>{
     const {userid} = req.headers
     const userdata = await User.findOne({
         _id:userid
