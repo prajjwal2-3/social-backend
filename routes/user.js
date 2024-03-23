@@ -46,25 +46,34 @@ router.get('/usersuggestion',async(req,res)=>{
 
 
 router.post('/post', userMiddleware,async (req, res) => {
-    const {username} = req.headers;
-   
-   const {description,id}=req.body;
-   Post.create({
+    const {username,password} = req.headers;
+   const userid = await User.findOne({
+    username:username,
+    password:password
+   })
+   console.log(userid)
+   console.log(userid._id)
+   const {description}=req.body;
+ await Post.create({
     description:description,
-    id:id
+    user_id:userid._id
    })
 
    const post = await Post.find({
-    id:id
+    user_id:userid._id
    })
+   console.log(post)
 if(post){
     await User.updateOne({
-        username:username
+        _id:userid._id
     },{
         $push:{
           Post:post
         }
     })
+    
+}else{
+    console.log("cant find")
 }
    res.send("post updated successfully ")
 });

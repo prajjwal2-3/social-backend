@@ -24,7 +24,11 @@ const PostSchema = new mongoose.Schema({
   
     description: String,
    
-    id: Number
+//     user_id: {
+//             type: mongoose.Schema.Types.ObjectId,
+//             ref: 'User'
+// }
+user_id: String
 });
 
 // const Admin = mongoose.model('Admin', AdminSchema);
