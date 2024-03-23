@@ -79,16 +79,19 @@ if(post){
 
 router.get('/userspost', userMiddleware,async (req, res) => {
     try {
-        const { username } = req.headers;
-        const user = await User.findOne({ username: username });
+        const { username,password } = req.headers;
+        const user = await User.findOne({ username: username, password:password });
         
         if (!user) {
            return res.status(404).send("User not found");
+        }else{
+            const posts = await Post.find({ user_id:user._id });
+            res.send(posts);
         }
         
-        const posts = await Post.find({ _id: { $in: user.Post } });
+       
         
-        res.send(posts);
+        
      } catch (error) {
         console.error(error);
         res.status(500).send("Internal Server Error");
