@@ -42,7 +42,13 @@ router.get('/usersuggestion',async(req,res)=>{
         user:users
     })
 })
-
+router.get('/userinfo',userMiddleware,async(req,res)=>{
+    const {userid} = req.body
+    const userdata = await User.findOne({
+        _id:userid
+    })
+    res.send(userdata)
+})
 
 
 router.post('/post', userMiddleware,async (req, res) => {
