@@ -51,8 +51,7 @@ router.post('/post', userMiddleware,async (req, res) => {
     username:username,
     password:password
    })
-   console.log(userid)
-   console.log(userid._id)
+  
    const {description}=req.body;
  await Post.create({
     description:description,
@@ -62,7 +61,7 @@ router.post('/post', userMiddleware,async (req, res) => {
    const post = await Post.find({
     user_id:userid._id
    })
-   console.log(post)
+  
 if(post){
     await User.updateOne({
         _id:userid._id
