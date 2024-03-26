@@ -4,7 +4,7 @@ const cors = require('cors')
 const app = express();
 // const adminRouter = require("./routes/admin")
 const userRouter = require("./routes/user");
-// app.use(cors)
+app.use(cors())
 // app.use(cors({*}))
 app.use(bodyParser.json());
 // app.use("/admin", adminRouter)
