@@ -29,7 +29,57 @@ router.get('/login',userMiddleware,(req,res)=>{
 
 
 )
+router.post('/sendrequest',userMiddleware, async (req,res)=>{
+    const {username,password,userid} = req.headers
+    
+const user = await User.findOne({
+    username:username,
+    password:password
+})
+const senderid = user._id;
+if(user){
+    //to update reciever
+    await User.updateOne({
+        _id:userid
+    },{
+        $push:{
+        Pendingrequest:senderid
+        }
+    })
+    //to update sender
+    await User.updateOne({
+        username:username,
+        password:password
+    },{
+        $push:{
+            Sentrequest:userid
+        }
+    })
+    res.send('connection request sent')
+    
+}else{
+    console.log("cant find")
+    res.send('cant find')
+}
 
+},
+
+router.get('/request',userMiddleware,async(req,res)=>{
+    const {username, password} = req.headers;
+    const user = await User.findOne({
+        username:username,
+        password:password
+    })
+    res.json(user.Pendingrequest)
+}),
+
+router.post('/acceptrequest',userMiddleware,async(req,res)=>{
+
+})
+
+
+
+)
 router.get('/post',async (req, res) => {
     const Postlist = await Post.find({})
     res.json({

@@ -14,10 +14,14 @@ const UserSchema = new mongoose.Schema({
     password: String,
     // profile: String,
     information: String,
+    Pendingrequest: Array,
+    Friends: Array,
+    Sentrequest: Array,
     Post: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Post'
     }]
+    
 });
 
 const PostSchema = new mongoose.Schema({
