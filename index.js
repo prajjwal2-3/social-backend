@@ -5,7 +5,7 @@ const app = express();
 // const adminRouter = require("./routes/admin")
 const userRouter = require("./routes/user");
 // app.use(cors)
-app.use(cors({origin:'http://localhost:3000/'}))
+// app.use(cors({*}))
 app.use(bodyParser.json());
 // app.use("/admin", adminRouter)
 app.use("/user", userRouter)
