@@ -14,7 +14,8 @@ router.post('/signup', (req, res) => {
        })
        res.json({
                username:username,
-               password:password
+               password:password,
+               msg:'true'
        })
 });
 router.get('/login',userMiddleware,(req,res)=>{
@@ -22,7 +23,7 @@ router.get('/login',userMiddleware,(req,res)=>{
     res.json({
         username:username,
         password:password,
-        msg:'login successful'
+        msg:'true'
     })
 }
 
