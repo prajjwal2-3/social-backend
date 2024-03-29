@@ -81,25 +81,25 @@ router.post('/acceptrequest', userMiddleware, async (req, res) => {
     const user = await User.findOne({ username, password });
 
     if (!user) {
-      return res.status(401).json({ error: 'Invalid credentials' }); // Handle unauthorized access
+      return res.status(401).json({ error: 'Invalid credentials' }); 
     }
 
-    // if (user.Pendingrequest.length === 0) {
-    //   return res.send('No pending requests to accept'); // Handle no pending requests
-    // }
+    if (user.Pendingrequest.length === 0) {
+      return res.send('No pending requests to accept'); 
+    }
      const user_id = user._id.valueOf();
     try {
       await User.updateOne({ _id: user._id }, { $pull: { Pendingrequest:userid },$push:{Friends:userid} });
       await User.updateOne({ _id:userid},{ $pull:{Sentrequest:user_id},$push:{Friends:user_id}})
-      const updatedUser = await User.findOne({ username, password }); // Optional: Re-fetch user for potential updates
+      const updatedUser = await User.findOne({ username, password }); 
       res.send("Friend request accepted");
     } catch (error) {
       console.error(error);
-      res.status(500).json({ error: 'Internal server error 1' }); // Generic error for client
+      res.status(500).json({ error: 'Internal server error 1' }); 
     }
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Internal server error 2' }); // Catch unexpected errors
+    res.status(500).json({ error: 'Internal server error 2' }); 
   }
 });
 
