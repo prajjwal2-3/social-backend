@@ -5,6 +5,7 @@ const {User,Post}= require("../db");
 const {default:mongoose}=require("mongoose");
 
 
+
 router.post('/signup', (req, res) => {
     const {username,password,information} = req.body
        User.create({
@@ -25,10 +26,10 @@ router.get('/login',userMiddleware,(req,res)=>{
         password:password,
         msg:'true'
     })
-}
+});
 
 
-)
+
 router.post('/sendrequest',userMiddleware, async (req,res)=>{
     const {username,password,userid} = req.headers
     
@@ -36,7 +37,7 @@ const user = await User.findOne({
     username:username,
     password:password
 })
-const senderid = user._id;
+const senderid = user._id.valueOf();
 if(user){
     //to update reciever
     await User.updateOne({
@@ -62,7 +63,7 @@ if(user){
     res.send('cant find')
 }
 
-},
+}),
 
 router.get('/request',userMiddleware,async(req,res)=>{
     const {username, password} = req.headers;
@@ -73,13 +74,39 @@ router.get('/request',userMiddleware,async(req,res)=>{
     res.json(user.Pendingrequest)
 }),
 
-router.post('/acceptrequest',userMiddleware,async(req,res)=>{
+router.post('/acceptrequest', userMiddleware, async (req, res) => {
+  try {
+    const { username, password, userid } = req.headers;
 
-})
+    const user = await User.findOne({ username, password });
+
+    if (!user) {
+      return res.status(401).json({ error: 'Invalid credentials' }); // Handle unauthorized access
+    }
+
+    // if (user.Pendingrequest.length === 0) {
+    //   return res.send('No pending requests to accept'); // Handle no pending requests
+    // }
+     const user_id = user._id.valueOf();
+    try {
+      await User.updateOne({ _id: user._id }, { $pull: { Pendingrequest:userid },$push:{Friends:userid} });
+      await User.updateOne({ _id:userid},{ $pull:{Sentrequest:user_id},$push:{Friends:user_id}})
+      const updatedUser = await User.findOne({ username, password }); // Optional: Re-fetch user for potential updates
+      res.send("Friend request accepted");
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Internal server error 1' }); // Generic error for client
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal server error 2' }); // Catch unexpected errors
+  }
+});
 
 
 
-)
+
+
 router.get('/post',async (req, res) => {
     const Postlist = await Post.find({})
     res.json({
