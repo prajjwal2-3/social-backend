@@ -7,7 +7,8 @@ function checkMiddleware(req, res, next) {
      ).then(function(value){
         const have = value.Pendingrequest.includes(userid)
         const friend = value.Friends.includes(userid)
-        if(have || friend){
+        const have2 = value.Friends.includes(userid)
+        if(have || friend || have2){
             res.status(403).json({
                 msg: "Already sent"
             })
