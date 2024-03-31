@@ -9,7 +9,7 @@ function checkMiddleware(req, res, next) {
         const friend = value.Friends.includes(userid)
         const have2 = value.Sentrequest.includes(userid)
         if(have || friend || have2){
-            res.status(403).json({
+            res.json({
                 msg: "Already sent"
             })
            
