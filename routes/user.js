@@ -3,6 +3,7 @@ const router = Router();
 const userMiddleware = require("../middleware/user");
 const {User,Post}= require("../db");
 const {default:mongoose}=require("mongoose");
+const checkMiddleware = require("../middleware/friendcheck");
 
 
 
@@ -30,7 +31,7 @@ router.get('/login',userMiddleware,(req,res)=>{
 
 
 
-router.post('/sendrequest',userMiddleware, async (req,res)=>{
+router.post('/sendrequest',userMiddleware,checkMiddleware, async (req,res)=>{
     const {username,password,userid} = req.headers
     
 const user = await User.findOne({
