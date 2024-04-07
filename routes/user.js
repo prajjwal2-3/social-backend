@@ -4,8 +4,17 @@ const userMiddleware = require("../middleware/user");
 const {User,Post}= require("../db");
 const {default:mongoose}=require("mongoose");
 const checkMiddleware = require("../middleware/friendcheck");
-
-
+//signup post
+//login get
+//sendrequest post
+//request  get
+//accept request post
+//get post
+//add post
+//user suggestions get
+//user info
+//users post
+//
 
 router.post('/signup', (req, res) => {
     const {username,password,information} = req.body
@@ -66,13 +75,17 @@ if(user){
 
 }),
 
-router.get('/request',userMiddleware,async(req,res)=>{
+router.get('/friendrequest',userMiddleware,async(req,res)=>{
     const {username, password} = req.headers;
     const user = await User.findOne({
         username:username,
         password:password
     })
-    res.json(user.Pendingrequest)
+    res.json({
+        'pending':user.Pendingrequest,
+        'sent':user.Sentrequest,
+        'friends': user.Friends
+    })
 }),
 
 router.post('/acceptrequest', userMiddleware, async (req, res) => {
